@@ -1,32 +1,21 @@
 <?php
 session_start();
+include_once "../database/koneksi.php";
 if (isset($_POST['submit'])) {
-	// require_once "database/koneksi.php";
-
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
-	// $sql = "SELECT * FROM user WHERE username='$username' AND password='$password'";
-	// if ($mysqli->query($sql)) {
-	// 	if ($mysqli->num_rows) {
-	// 		$user = $user->fetch_assoc();
-	// 		$_SESSION['nama'] = $user['nama'];
-	// 		$_SESSION['id_user'] = $user['id_user'];
-	// 		$_SESSION['status'] = $user['status'];
-	// 		header('Location: index.php');
-	// 	} else echo "<script>alert('Username atau Password Salah!');</script>";
-	// } else echo "Error: " . $sql . "<br>" . $mysqli->error;
-	if ($username === 'admin') {
-		$_SESSION['nama'] = "ADMIN";
-		$_SESSION['status'] = "ADMIN";
-	} else if ($username === 'pimpinan') {
-		$_SESSION['nama'] = "PIMPINAN";
-		$_SESSION['status'] = "PIMPINAN";
-	} else if ($username === 'pegawai') {
-		$_SESSION['nama'] = "PEGAWAI";
-		$_SESSION['status'] = "PEGAWAI";
-	}
-	header('Location: ../index.php');
+	$sql = "SELECT user.*, pegawai.id AS id_pegawai, pegawai.nama FROM user LEFT JOIN pegawai ON user.id=pegawai.id_user WHERE user.username='$username' AND user.password='$password'";
+	if ($result = $mysqli->query($sql)) {
+		if ($result->num_rows) {
+			$user = $result->fetch_assoc();
+			$_SESSION['nama'] = $user['nama'];
+			$_SESSION['id_pegawai'] = $user['id_pegawai'];
+			$_SESSION['id_user'] = $user['id_user'];
+			$_SESSION['status'] = $user['status'];
+			header('Location: ../index.php');
+		} else echo "<script>alert('Username atau Password Salah!');</script>";
+	} else echo "Error: " . $sql . "<br>" . $mysqli->error;
 }
 ?>
 <!DOCTYPE html>
@@ -49,14 +38,12 @@ if (isset($_POST['submit'])) {
 
 <body class="hold-transition login-page">
 	<div class="login-box">
-		<div class="login-logo">
-			<a href="../../index2.html"><b>Admin</b>LTE</a>
-		</div>
-		<!-- /.login-logo -->
 		<div class="card">
 			<div class="card-body login-card-body">
-				<p class="login-box-msg">Sign in to start your session</p>
-
+				<div class="d-flex justify-content-center mb-3">
+					<img src="../assets/img/logo.png" width="110" height="110">
+					<p class="login-box-msg" style="font-weight: bold;">Badan Kepegawaian Daerah dan Pengembangan Sumber Daya Manusia Kabupaten Banjar</p>
+				</div>
 				<form action="" method="POST">
 					<div class="input-group mb-3">
 						<input type="text" class="form-control" name="username" placeholder="Username">

@@ -1,4 +1,16 @@
 <?php
+
+if (isset($_GET['id'])) {
+    $result = $mysqli->query("SELECT pegawai.*, user.username, user.password, user.status FROM pegawai INNER JOIN user ON pegawai.id_user=user.id WHERE pegawai.id=" . $_GET['id']);
+    $data = $result->fetch_assoc();
+    $id_user = $data['id_user'];
+    $gambar = $data['gambar'];
+} else {
+    echo "<script>alert('id tidak ditemukan');</script>";
+    echo "<script>window.location.href = '?page=pegawai';</script>";
+}
+
+
 if (isset($_POST['submit'])) {
     $nip = $_POST['nip'];
     $nama = $_POST['nama'];
@@ -14,52 +26,38 @@ if (isset($_POST['submit'])) {
     $status = $_POST['status'];
 
     $target_dir = "uploads/";
-    $gambar = $target_dir . Date("YmdHis") . "1." . strtolower(pathinfo(basename($_FILES["gambar"]["name"]), PATHINFO_EXTENSION));
-    move_uploaded_file($_FILES["gambar"]["tmp_name"], $gambar);
-
+    if ($_FILES['gambar']['error'] != 4) {
+        $gambar = $target_dir . Date("YmdHis") . "1." . strtolower(pathinfo(basename($_FILES["gambar"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["gambar"]["tmp_name"], $gambar);
+    }
 
     $q = "
-        INSERT INTO user (
-            username,
-            password,
-            status  
-        ) VALUES (
-            '$username',
-            '$password',
-            '$status' 
-        )
+        UPDATE user SET 
+            username='$username',
+            password='$password',
+            status='$status' 
+        WHERE 
+            id=$id_user
     ";
     if ($mysqli->query($q)) {
         $last_id = $mysqli->insert_id;
         $q = "
-        INSERT INTO pegawai (
-            id_user,
-            nip,
-            nama,
-            nomor_telepon,
-            tanggal_lahir,
-            pangkat,
-            golongan,
-            tmt,
-            jabatan,
-            unit_kerja,
-            gambar 
-        ) VALUES (
-            '$last_id',
-            '$nip',
-            '$nama',
-            '$nomor_telepon',
-            '$tanggal_lahir',
-            '$pangkat',
-            '$golongan',
-            '$tmt',
-            '$jabatan',
-            '$unit_kerja',
-            '$gambar'
-        )
-    ";
+        UPDATE pegawai SET 
+            nip='$nip',
+            nama='$nama',
+            nomor_telepon='$nomor_telepon',
+            tanggal_lahir='$tanggal_lahir',
+            pangkat='$pangkat',
+            golongan='$golongan',
+            tmt='$tmt',
+            jabatan='$jabatan',
+            unit_kerja='$unit_kerja',
+            gambar='$gambar'  
+        WHERE 
+            id=" . $_GET['id'] . "
+       ";
         if ($mysqli->query($q)) {
-            echo "<script>alert('Berhasil menambah data pegawai');</script>";
+            echo "<script>alert('Berhasil memperbaharui data pegawai');</script>";
             echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
         } else echo "Error: " . $q . "<br>" . $mysqli->error;
     } else echo "Error: " . $q . "<br>" . $mysqli->error;
@@ -92,26 +90,26 @@ if (isset($_POST['submit'])) {
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="nip">NIP</label>
-                                <input type="text" class="form-control" name="nip" id="nip" placeholder="Masukkan nip">
+                                <input type="text" class="form-control" name="nip" id="nip" placeholder="Masukkan nip" value="<?= $data['nip']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="nama">Nama</label>
-                                <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama">
+                                <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama" value="<?= $data['nama']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="nomor_telepon">Nomor Telepon</label>
-                                <input type="text" class="form-control" id="nomor_telepon" name="nomor_telepon" placeholder="Masukkan nomor telepom">
+                                <input type="text" class="form-control" id="nomor_telepon" name="nomor_telepon" placeholder="Masukkan nomor telepon" value="<?= $data['nomor_telepon']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="tanggal_lahir">Tanggal Lahir</label>
-                                <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir">
+                                <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir" value="<?= $data['tanggal_lahir']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="gambar">Gambar</label>
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="gambar" name="gambar" accept="image/*" onchange="previewImage(this)">
-                                        <label class="custom-file-label" for="gambar">Pilih Gambar</label>
+                                        <label class="custom-file-label" for="gambar">Pilih gambar baru untuk memperbaharui</label>
                                     </div>
                                 </div>
                             </div>
@@ -128,23 +126,23 @@ if (isset($_POST['submit'])) {
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="pangkat">Pangkat</label>
-                                <input type="text" class="form-control" name="pangkat" id="pangkat" placeholder="Masukkan Pangkat">
+                                <input type="text" class="form-control" name="pangkat" id="pangkat" placeholder="Masukkan Pangkat" value="<?= $data['pangkat']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="golongan">Golongan</label>
-                                <input type="text" class="form-control" name="golongan" id="golongan" placeholder="Masukkan golongan">
+                                <input type="text" class="form-control" name="golongan" id="golongan" placeholder="Masukkan golongan" value="<?= $data['golongan']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="tmt">TMT</label>
-                                <input type="date" class="form-control" name="tmt" id="tmt">
+                                <input type="date" class="form-control" name="tmt" id="tmt" value="<?= $data['tmt']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="jabatan">Jabatan</label>
-                                <input type="text" class="form-control" id="jabatan" name="jabatan" placeholder="Masukkan jabatan">
+                                <input type="text" class="form-control" id="jabatan" name="jabatan" placeholder="Masukkan jabatan" value="<?= $data['jabatan']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="unit_kerja">Unit Kerja</label>
-                                <input type="text" class="form-control" id="unit_kerja" name="unit_kerja" placeholder="Masukkan unit kerja">
+                                <input type="text" class="form-control" id="unit_kerja" name="unit_kerja" placeholder="Masukkan unit kerja" value="<?= $data['unit_kerja']; ?>">
                             </div>
                         </div>
                     </div>
@@ -155,7 +153,7 @@ if (isset($_POST['submit'])) {
                             <h3 class="card-title">Preview Gambar</h3>
                         </div>
                         <div class="card-body d-flex justify-content-center" style="height: 470.5px; padding: 20px;">
-                            <img id="preview">
+                            <img id="preview" src="<?= $gambar; ?>">
                         </div>
                     </div>
 
@@ -166,23 +164,23 @@ if (isset($_POST['submit'])) {
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control" name="username" id="username" placeholder="Username" readonly>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Username" readonly value="<?= $data['username']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="<?= $data['password']; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" required class="form-control">
-                                    <option value="ADMIN">Admin</option>
-                                    <option value="PIMPINAN">Pimpinan</option>
-                                    <option value="PEGAWAI" selected>Pegawai</option>
+                                    <option <?= $data['status'] === "ADMIN" ? "selected" : ""; ?> value="ADMIN">Admin</option>
+                                    <option <?= $data['status'] === "PIMPINAN" ? "selected" : ""; ?> value="PIMPINAN">Pimpinan</option>
+                                    <option <?= $data['status'] === "PEGAWAI" ? "selected" : ""; ?> value="PEGAWAI" selected>Pegawai</option>
                                 </select>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary float-right" name="submit">Tambah</button>
+                            <button type="submit" class="btn btn-primary float-right" name="submit">Simpan</button>
                         </div>
                     </div>
                 </div>

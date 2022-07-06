@@ -27,33 +27,37 @@
             <table id="example2" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Jabatan</th>
-                        <th>Unit Kerja</th>
-                        <th>Aksi</th>
+                        <th class="text-center">NIP</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">Jabatan</th>
+                        <th class="text-center">Unit Kerja</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php
+                    $q = "SELECT * FROM pegawai";
+
+                    if ($result = $mysqli->query($q)) {
+                    } else echo "Error: " . $q . "<br>" . $mysqli->error;
+                    ?>
+                    <?php while ($row = $result->fetch_assoc()) : ?>
+                        <tr>
+                            <td class="text-center" style="vertical-align: middle;"><?= $row['nip'] ?></td>
+                            <td style="vertical-align: middle;"><?= $row['nama'] ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= $row['jabatan'] ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= $row['unit_kerja'] ?></td>
+                            <td class="text-center">
+                                <a href="?page=pegawai&method=detail&id=<?= $row['id'] ?>" class="btn btn-sm btn-info"><i class="far fa-eye"></i></a>
+                                <a href="?page=pegawai&method=edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="far fa-edit"></i></a>
+                                <form action="?page=pegawai&method=hapus&id=<?= $row['id'] ?>" method="POST" class="d-inline">
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="far fa-trash-alt"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
     </div>
-    <!-- /.card -->
-
 </section>
-<!-- /.content -->
-<script>
-    $(function() {
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
-    });
-</script>

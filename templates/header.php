@@ -39,7 +39,12 @@
   <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
   <link rel="stylesheet" href="assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <script src="assets/plugins/select2/js/select2.full.min.js"></script>
-
+  <style>
+    tr td:last-child {
+      width: 1%;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

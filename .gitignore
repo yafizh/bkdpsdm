@@ -1,7 +1,4 @@
 AdminLTE-3.2.0
-database
-halaman_delete_data
-halaman_detail
-halaman_edit_data
 halaman_profile
 utils
+uploads/*

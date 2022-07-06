@@ -1,50 +1,71 @@
 <?php
+if (isset($_GET['id'])) {
+    $result = $mysqli->query("SELECT * FROM kenaikan_pangkat_struktural WHERE id=" . $_GET['id']);
+    $data = $result->fetch_assoc();
+    $dokumen1 = $data['surat_pengantar_skpd'];
+    $dokumen2 = $data['sk_pangkat_terakhir'];
+    $dokumen3 = $data['sk_jabatan_spmj_spp_spmt'];
+    $dokumen4 = $data['ijazah_transkip_nilai'];
+    $dokumen5 = $data['skp'];
+} else {
+    echo "<script>alert('id tidak ditemukan');</script>";
+    echo "<script>window.location.href = '?page=struktural';</script>";
+}
+
 if (isset($_POST['submit'])) {
     $id_pegawai = $_SESSION['id_pegawai'];
     $periode = $_POST['periode'];
 
     $target_dir = "uploads/";
 
-    $dokumen1 = $target_dir . Date("YmdHis") . "1." . strtolower(pathinfo(basename($_FILES["dokumen1"]["name"]), PATHINFO_EXTENSION));
-    $dokumen2 = $target_dir . Date("YmdHis") . "2." . strtolower(pathinfo(basename($_FILES["dokumen2"]["name"]), PATHINFO_EXTENSION));
-    $dokumen3 = $target_dir . Date("YmdHis") . "3." . strtolower(pathinfo(basename($_FILES["dokumen3"]["name"]), PATHINFO_EXTENSION));
-    $dokumen4 = $target_dir . Date("YmdHis") . "4." . strtolower(pathinfo(basename($_FILES["dokumen4"]["name"]), PATHINFO_EXTENSION));
-    $dokumen5 = $target_dir . Date("YmdHis") . "5." . strtolower(pathinfo(basename($_FILES["dokumen5"]["name"]), PATHINFO_EXTENSION));
+    if ($_FILES['dokumen1']['error'] != 4) {
+        if (file_exists($dokumen1)) unlink($dokumen1);
+        $dokumen1 = $target_dir . Date("YmdHis") . "1." . strtolower(pathinfo(basename($_FILES["dokumen1"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["dokumen1"]["tmp_name"], $dokumen1);
+    }
 
-    move_uploaded_file($_FILES["dokumen1"]["tmp_name"], $dokumen1);
-    move_uploaded_file($_FILES["dokumen2"]["tmp_name"], $dokumen2);
-    move_uploaded_file($_FILES["dokumen3"]["tmp_name"], $dokumen3);
-    move_uploaded_file($_FILES["dokumen4"]["tmp_name"], $dokumen4);
-    move_uploaded_file($_FILES["dokumen5"]["tmp_name"], $dokumen5);
+    if ($_FILES['dokumen2']['error'] != 4) {
+        if (file_exists($dokumen2)) unlink($dokumen2);
+        $dokumen2 = $target_dir . Date("YmdHis") . "2." . strtolower(pathinfo(basename($_FILES["dokumen2"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["dokumen2"]["tmp_name"], $dokumen2);
+    }
+
+    if ($_FILES['dokumen3']['error'] != 4) {
+        if (file_exists($dokumen3)) unlink($dokumen3);
+        $dokumen3 = $target_dir . Date("YmdHis") . "3." . strtolower(pathinfo(basename($_FILES["dokumen3"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["dokumen3"]["tmp_name"], $dokumen3);
+    }
+
+    if ($_FILES['dokumen4']['error'] != 4) {
+        if (file_exists($dokumen4)) unlink($dokumen4);
+        $dokumen4 = $target_dir . Date("YmdHis") . "4." . strtolower(pathinfo(basename($_FILES["dokumen4"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["dokumen4"]["tmp_name"], $dokumen4);
+    }
+
+    if ($_FILES['dokumen5']['error'] != 4) {
+        if (file_exists($dokumen5)) unlink($dokumen5);
+        $dokumen5 = $target_dir . Date("YmdHis") . "5." . strtolower(pathinfo(basename($_FILES["dokumen5"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["dokumen5"]["tmp_name"], $dokumen5);
+    }
 
     $q = "
-        INSERT INTO kenaikan_pangkat_struktural (
-            id_pegawai,
-            periode,
-            surat_pengantar_skpd,
-            sk_pangkat_terakhir,
-            sk_jabatan_spmj_spp_spmt,
-            ijazah_transkip_nilai,
-            skp,
-            tanggal_pengajuan,
-            tanggal_verifikasi,
-            status 
-        ) VALUES (
-            " . $_SESSION['id_pegawai'] . ",
-            '$periode',
-            '$dokumen1',
-            '$dokumen2',
-            '$dokumen3',
-            '$dokumen4',
-            '$dokumen5',
-            '" . Date("Y-m-d H:i:s") . "',
-            NULL,
-            'PENGAJUAN' 
-        )
+        UPDATE kenaikan_pangkat_struktural SET 
+            id_pegawai= " . $_SESSION['id_pegawai'] . ",
+            periode='$periode',
+            surat_pengantar_skpd='$dokumen1',
+            sk_pangkat_terakhir='$dokumen2',
+            sk_jabatan_spmj_spp_spmt='$dokumen3',
+            ijazah_transkip_nilai='$dokumen4',
+            skp='$dokumen5',
+            tanggal_pengajuan='" . Date("Y-m-d H:i:s") . "',
+            tanggal_verifikasi=NULL,
+            status='PENGAJUAN' 
+        WHERE 
+            id=" . $_GET['id'] . "
     ";
 
     if ($mysqli->query($q)) {
-        echo "<script>alert('Berhasil mengajukan kenaikan pangkat struktural');</script>";
+        echo "<script>alert('Berhasil memperbaharui kenaikan pangkat struktural');</script>";
         echo "<script>window.location.href = '?page=struktural';</script>";
     } else echo "Error: " . $q . "<br>" . $mysqli->error;
 }
@@ -53,12 +74,12 @@ if (isset($_POST['submit'])) {
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Form Pengajuan Kenaikan Pangkat Struktural</h1>
+                <h1>Form Edit Pengajuan Kenaikan Pangkat Struktural</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Form Pengajuan Kenaikan Pangkat Struktural</li>
+                    <li class="breadcrumb-item active">Form Edit Pengajuan Kenaikan Pangkat Struktural</li>
                 </ol>
             </div>
         </div>
@@ -79,16 +100,16 @@ if (isset($_POST['submit'])) {
                                 <label for="periode">Periode</label>
                                 <select name="periode" id="periode" required class="form-control">
                                     <option value="" disabled selected>Pilih Periode</option>
-                                    <option value="April">April</option>
-                                    <option value="Oktober">Oktober</option>
+                                    <option <?= $data['periode'] === 'April' ? "selected" : ""; ?> value="April">April</option>
+                                    <option <?= $data['periode'] === 'Oktober' ? "selected" : ""; ?> value="Oktober">Oktober</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="dokumen1">Surat Pengantar SKPD</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="dokumen1" name="dokumen1" accept=".pdf" onchange="preview(this)" required>
-                                        <label class="custom-file-label" for="dokumen1">Pilih File</label>
+                                        <input type="file" class="custom-file-input" id="dokumen1" name="dokumen1" accept=".pdf" onchange="preview(this)">
+                                        <label class="custom-file-label" for="dokumen1">Pilih file baru untuk mengganti file lama</label>
                                     </div>
                                 </div>
                             </div>
@@ -96,8 +117,8 @@ if (isset($_POST['submit'])) {
                                 <label for="dokumen2">Surat Pangkat Terakhir</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="dokumen2" name="dokumen2" accept=".pdf" onchange="preview(this)" required>
-                                        <label class="custom-file-label" for="dokumen2">Pilih File</label>
+                                        <input type="file" class="custom-file-input" id="dokumen2" name="dokumen2" accept=".pdf" onchange="preview(this)">
+                                        <label class="custom-file-label" for="dokumen2">Pilih file baru untuk mengganti file lama</label>
                                     </div>
                                 </div>
                             </div>
@@ -105,8 +126,8 @@ if (isset($_POST['submit'])) {
                                 <label for="dokumen3">SK Jabatan, SPMJ, SPP, dan SPMT</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="dokumen3" name="dokumen3" accept=".pdf" onchange="preview(this)" required>
-                                        <label class="custom-file-label" for="dokumen3">Pilih File</label>
+                                        <input type="file" class="custom-file-input" id="dokumen3" name="dokumen3" accept=".pdf" onchange="preview(this)">
+                                        <label class="custom-file-label" for="dokumen3">Pilih file baru untuk mengganti file lama</label>
                                     </div>
                                 </div>
                             </div>
@@ -114,8 +135,8 @@ if (isset($_POST['submit'])) {
                                 <label for="dokumen4">Izajah Terakhir dan Transkip Nilai</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="dokumen4" name="dokumen4" accept=".pdf" onchange="preview(this)" required>
-                                        <label class="custom-file-label" for="dokumen4">Pilih File</label>
+                                        <input type="file" class="custom-file-input" id="dokumen4" name="dokumen4" accept=".pdf" onchange="preview(this)">
+                                        <label class="custom-file-label" for="dokumen4">Pilih file baru untuk mengganti file lama</label>
                                     </div>
                                 </div>
                             </div>
@@ -123,20 +144,23 @@ if (isset($_POST['submit'])) {
                                 <label for="dokumen5">SKP Tahun Terakhir</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="dokumen5" name="dokumen5" accept=".pdf" onchange="preview(this)" required>
-                                        <label class="custom-file-label" for="dokumen5">Pilih File</label>
+                                        <input type="file" class="custom-file-input" id="dokumen5" name="dokumen5" accept=".pdf" onchange="preview(this)">
+                                        <label class="custom-file-label" for="dokumen5">Pilih file baru untuk mengganti file lama</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-end">
-                            <a href="?page=struktural" class="btn btn-secondary ml-2">Kembali</a>
-                            <button class="btn btn-primary ml-2" type="submit" name="submit">Ajukan</button>
+                        <a href="?page=struktural" class="btn btn-secondary ml-2">Kembali</a>
+                            <button class="btn btn-primary ml-2" type="submit" name="submit">Simpan</button>
                         </div>
                     </div>
                 </form>
             </div>
+            <!--/.col (left) -->
+            <!-- right column -->
             <div class="col-md-6">
+                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen Surat Pengantar SKPD</h3>
@@ -147,9 +171,12 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="card-body" style="height: 640px; display: none;">
-                        <iframe src="" id="preview-dokumen1" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        <iframe src="<?= $dokumen1; ?>" id="preview-dokumen1" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
+                <!-- /.card -->
+
+                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen SK Pangkat Terakhir</h3>
@@ -160,9 +187,12 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="card-body" style="height: 640px; display: none;">
-                        <iframe src="" id="preview-dokumen2" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        <iframe src="<?= $dokumen2; ?>" id="preview-dokumen2" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
+                <!-- /.card -->
+
+                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen SK Jabatan, SPMJ, SPP, dan SPMT</h3>
@@ -173,9 +203,12 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="card-body" style="height: 640px; display: none;">
-                        <iframe src="" id="preview-dokumen3" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        <iframe src="<?= $dokumen3; ?>" id="preview-dokumen3" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
+                <!-- /.card -->
+
+                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen Izajah Terakhir dan Transkip Nilai</h3>
@@ -186,7 +219,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="card-body" style="height: 640px; display: none;">
-                        <iframe src="" id="preview-dokumen4" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        <iframe src="<?= $dokumen4; ?>" id="preview-dokumen4" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
                 <div class="card card-primary collapsed-card">
@@ -199,7 +232,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="card-body" style="height: 640px; display: none;">
-                        <iframe src="" id="preview-dokumen5" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        <iframe src="<?= $dokumen5; ?>" id="preview-dokumen5" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
             </div>
@@ -226,7 +259,7 @@ if (isset($_POST['submit'])) {
         oFReader.onload = function(oFREvent) {
             preview.src = oFREvent.target.result;
             if (!already_open) preview.parentElement.previousElementSibling.children[1].children[0].click();
-            input.nextElementSibling.innerHTML = input.files[0].name;
+            input.nextElementSibling.innerHTML = input.value;
         }
     }
 </script>
