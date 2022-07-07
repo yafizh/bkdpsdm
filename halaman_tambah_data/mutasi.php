@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
     move_uploaded_file($_FILES["dokumen3"]["tmp_name"], $dokumen3);
     move_uploaded_file($_FILES["dokumen4"]["tmp_name"], $dokumen4);
     move_uploaded_file($_FILES["dokumen5"]["tmp_name"], $dokumen5);
-    move_uploaded_file($_FILES["dokumen7"]["tmp_name"], $dokumen6);
+    move_uploaded_file($_FILES["dokumen6"]["tmp_name"], $dokumen6);
     move_uploaded_file($_FILES["dokumen7"]["tmp_name"], $dokumen7);
     move_uploaded_file($_FILES["dokumen8"]["tmp_name"], $dokumen8);
     move_uploaded_file($_FILES["dokumen9"]["tmp_name"], $dokumen9);

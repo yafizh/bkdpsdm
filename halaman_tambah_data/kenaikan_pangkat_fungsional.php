@@ -174,10 +174,7 @@ if (isset($_POST['submit'])) {
                 </form>
 
             </div>
-            <!--/.col (left) -->
-            <!-- right column -->
             <div class="col-md-6">
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen Surat Pengantar SKPD</h3>
@@ -187,14 +184,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen1" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen PAK Asli</h3>
@@ -204,14 +197,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen2" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen PAK Sebelumnya</h3>
@@ -221,14 +210,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen3" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen SK Pengangkatan Terakhir</h3>
@@ -238,14 +223,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen4" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">SK Pengangkatan Jabatan Fungsional</h3>
@@ -255,14 +236,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen5" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">SK Pindah Tempat Tugas</h3>
@@ -272,14 +249,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen6" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Izajah Terakhir dan Transkip Nilai</h3>
@@ -289,14 +262,10 @@ if (isset($_POST['submit'])) {
                             </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body" style="height: 640px; display: none;">
                         <iframe src="" id="preview-dokumen7" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- general form elements -->
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Doumen KTP</h3>

@@ -12,43 +12,114 @@ if (isset($_GET['id'])) {
     $dokumen8 = $data['surat_keterangan_bebas_temuan'];
     $dokumen9 = $data['surat_pernyataan_bebas_tugas'];
     $dokumen10 = $data['skp_2_tahun_terakhir'];
+    $dokumen11 = $data['nota_usul'];
+    $dokumen12 = $data['sk_mutasi'];
 } else {
     echo "<script>alert('id tidak ditemukan');</script>";
-    echo "<script>window.location.href = '?page=skpd';</script>";
+    echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
 }
 
 if ($_SESSION['status'] === 'PIMPINAN') {
-    if (isset($_POST['terima'])) {
-        $keterangan = $_POST['keterangan_terima'];
+    if ($_GET['jenis_mutasi'] === 'MASUK') {
+        if (isset($_POST['terima'])) {
+            $keterangan = $_POST['keterangan_terima'];
+            $q = "
+            UPDATE 
+                mutasi 
+            SET 
+                tanggal_verifikasi='" . Date("Y-m-d H:i:s") . "',
+                status='DITERIMA',
+                keterangan='$keterangan' 
+            WHERE 
+                id=" . $_GET['id'] . "
+            ";
+            if ($mysqli->query($q)) {
+                echo "<script>alert('Berhasil menerima pengajukan mutasi');</script>";
+                echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
+            } else echo "Error: " . $q . "<br>" . $mysqli->error;
+        }
+        if (isset($_POST['tolak'])) {
+            $keterangan = $_POST['keterangan_tolak'];
+            $q = "
+            UPDATE 
+                mutasi 
+            SET 
+                tanggal_verifikasi='" . Date("Y-m-d H:i:s") . "',
+                status='DITOLAK',
+                keterangan='$keterangan' 
+            WHERE 
+                id=" . $_GET['id'] . "
+        ";
+            if ($mysqli->query($q)) {
+                echo "<script>alert('Berhasil menolak pengajukan mutasi');</script>";
+                echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
+            } else echo "Error: " . $q . "<br>" . $mysqli->error;
+        }
+    } elseif ($_GET['jenis_mutasi'] === 'KELUAR') {
+        if (isset($_POST['terima'])) {
+            $keterangan = $_POST['keterangan_terima'];
+            $q = "
+            UPDATE 
+                mutasi 
+            SET 
+                tanggal_verifikasi='" . Date("Y-m-d H:i:s") . "',
+                tanggal_selesai='" . Date("Y-m-d H:i:s") . "',
+                status='SELESAI',
+                keterangan='$keterangan' 
+            WHERE 
+                id=" . $_GET['id'] . "
+            ";
+            if ($mysqli->query($q)) {
+                echo "<script>alert('Berhasil menerima pengajukan mutasi');</script>";
+                echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
+            } else echo "Error: " . $q . "<br>" . $mysqli->error;
+        }
+        if (isset($_POST['tolak'])) {
+            $keterangan = $_POST['keterangan_tolak'];
+            $q = "
+            UPDATE 
+                mutasi 
+            SET 
+                tanggal_verifikasi='" . Date("Y-m-d H:i:s") . "',
+                status='DITOLAK',
+                keterangan='$keterangan' 
+            WHERE 
+                id=" . $_GET['id'] . "
+        ";
+            if ($mysqli->query($q)) {
+                echo "<script>alert('Berhasil menolak pengajukan mutasi');</script>";
+                echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
+            } else echo "Error: " . $q . "<br>" . $mysqli->error;
+        }
+    }
+}
+
+if ($_SESSION['status'] === 'ADMIN' && $_GET['jenis_mutasi'] === 'MASUK') {
+    if (isset($_POST['selesai'])) {
+
+        $target_dir = "uploads/";
+
+        if (file_exists($dokumen11)) unlink($dokumen11);
+        $dokumen11 = $target_dir . Date("YmdHis") . "11." . strtolower(pathinfo(basename($_FILES["sk_mutasi"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["sk_mutasi"]["tmp_name"], $dokumen11);
+
+        if (file_exists($dokumen12)) unlink($dokumen12);
+        $dokumen12 = $target_dir . Date("YmdHis") . "12." . strtolower(pathinfo(basename($_FILES["nota_usul"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["nota_usul"]["tmp_name"], $dokumen12);
+
         $q = "
         UPDATE 
             mutasi 
         SET 
-            tanggal_verifikasi='" . Date("Y-m-d H:i:s") . "',
-            status='DITERIMA',
-            keterangan='$keterangan' 
+            tanggal_selesai='" . Date("Y-m-d H:i:s") . "',
+            sk_mutasi='$dokumen11',
+            nota_usul='$dokumen12',
+            status='SELESAI'  
         WHERE 
             id=" . $_GET['id'] . "
         ";
         if ($mysqli->query($q)) {
-            echo "<script>alert('Berhasil menerima pengajukan mutasi');</script>";
-            echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
-        } else echo "Error: " . $q . "<br>" . $mysqli->error;
-    }
-    if (isset($_POST['tolak'])) {
-        $keterangan = $_POST['keterangan_tolak'];
-        $q = "
-        UPDATE 
-            mutasi 
-        SET 
-            tanggal_verifikasi='" . Date("Y-m-d H:i:s") . "',
-            status='DITOLAK',
-            keterangan='$keterangan' 
-        WHERE 
-            id=" . $_GET['id'] . "
-    ";
-        if ($mysqli->query($q)) {
-            echo "<script>alert('Berhasil menolak pengajukan mutasi');</script>";
+            echo "<script>alert('Berhasil menyerahkan SK Mutasi dan Nota Usul');</script>";
             echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
         } else echo "Error: " . $q . "<br>" . $mysqli->error;
     }
@@ -77,7 +148,7 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Dokumen</h3>
+                            <h3 class="card-title">Riwayat Pengajuan</h3>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
@@ -91,18 +162,20 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                             <div class="form-group">
                                 <label class="d-block">Status Pengajuan</label>
                                 <label>
-                                    <?php
-                                    if ($data['status'] == "PENGAJUAN") {
-                                        echo "<span class='badge badge-warning'>Menunggu Konfirmasi</span>";
-                                    } elseif ($data['status'] == "DITOLAK") {
-                                        echo "<span class='badge badge-danger'>Ditolak</span>";
-                                    } elseif ($data['status'] == "DITERIMA") {
-                                        echo "<span class='badge badge-success'>Diterima</span>";
-                                    }
-                                    ?>
+                                    <?php if ($data['status'] === "PENGAJUAN") : ?>
+                                        <span class='badge badge-warning'>Menunggu Konfirmasi</span>
+                                    <?php elseif ($data['status'] === "DITERIMA") : ?>
+                                        <span class='badge badge-success'>Diterima</span>
+                                        <span class='badge badge-warning'>Menunggu SK Mutasi</span>
+                                        <span class='badge badge-warning'>Menunggu Nota Usul</span>
+                                    <?php elseif ($data['status'] === "DITOLAK") : ?>
+                                        <span class='badge badge-danger'>Ditolak</span>
+                                    <?php elseif ($data['status'] === "SELESAI") : ?>
+                                        <span class='badge badge-success'>Selesai</span>
+                                    <?php endif; ?>
                                 </label>
                             </div>
-                            <?php if ($data['status'] == "DITERIMA" || $data['status'] == "DITOLAK") : ?>
+                            <?php if ($data['status'] !== "PENGAJUAN") : ?>
                                 <div class="form-group">
                                     <label for="tanggal_verifikasi">Tanggal Verifikasi</label>
                                     <input type="text" class="form-control" id="tanggal_verifikasi" value="<?= date_format(date_create(explode(" ", $data['tanggal_verifikasi'])[0]), "d-m-Y"); ?>" disabled>
@@ -114,6 +187,16 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                                 <div class="form-group">
                                     <label for="waktu_pengajuan">Keterangan</label>
                                     <textarea class="form-control" cols="30" rows="3" readonly><?= $data['keterangan']; ?></textarea>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($data['status'] === "SELESAI") : ?>
+                                <div class="form-group">
+                                    <label for="tanggal_selesai">Tanggal Disetujui</label>
+                                    <input type="text" class="form-control" id="tanggal_selesai" value="<?= date_format(date_create(explode(" ", $data['tanggal_selesai'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_selesai">Waktu Disetujui</label>
+                                    <input type="text" class="form-control" id="waktu_selesai" value="<?= explode(" ", $data['tanggal_selesai'])[1]; ?>" disabled>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -157,7 +240,7 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-end">
-                            <a href="?page=struktural" class="btn btn-secondary mr-2">Kembali</a>
+                            <a href="?page=<?= $_GET['page'] ?>" class="btn btn-secondary mr-2">Kembali</a>
                             <form action="" method="POST" class="d-inline">
                                 <textarea name="keterangan_tolak" hidden></textarea>
                                 <button type="submit" name="tolak" class="btn btn-danger" onclick="return confirm('Are you sure?')">Tolak</button>
@@ -175,6 +258,88 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                             })
                         </script>
                     </div>
+                </div>
+            <?php elseif ($_SESSION['status'] === 'ADMIN') : ?>
+                <div class="col-md-6">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Riwayat Pengajuan</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="nip">NIP</label>
+                                    <input type="text" class="form-control" id="nip" value="<?= $data['nip'] ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama">Nama Pegawai</label>
+                                    <input type="text" class="form-control" id="nama" value="<?= $data['nama'] ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_pengajuan">Tanggal Pengajaun</label>
+                                    <input type="text" class="form-control" id="tanggal_pengajuan" value="<?= date_format(date_create(explode(" ", $data['tanggal_pengajuan'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_pengajuan">Waktu Pengajuan</label>
+                                    <input type="text" class="form-control" id="waktu_pengajuan" value="<?= explode(" ", $data['tanggal_pengajuan'])[1]; ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Status Pengajuan</label>
+                                    <label>
+                                        <?php if ($data['status'] === "PENGAJUAN") : ?>
+                                            <span class='badge badge-warning'>Menunggu Konfirmasi</span>
+                                        <?php elseif ($data['status'] === "DITERIMA") : ?>
+                                            <span class='badge badge-success'>Diterima</span>
+                                            <span class='badge badge-warning'>Menunggu SK Mutasi</span>
+                                            <span class='badge badge-warning'>Menunggu Nota Usul</span>
+                                        <?php elseif ($data['status'] === "DITOLAK") : ?>
+                                            <span class='badge badge-danger'>Ditolak</span>
+                                        <?php elseif ($data['status'] === "SELESAI") : ?>
+                                            <span class='badge badge-success'>Selesai</span>
+                                        <?php endif; ?>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_verifikasi">Tanggal Verifikasi</label>
+                                    <input type="text" class="form-control" id="tanggal_verifikasi" value="<?= date_format(date_create(explode(" ", $data['tanggal_verifikasi'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_verifikasi">Waktu Verifikasi</label>
+                                    <input type="text" class="form-control" id="waktu_verifikasi" value="<?= explode(" ", $data['tanggal_verifikasi'])[1]; ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_pengajuan">Keterangan</label>
+                                    <textarea id="keterangan" class="form-control" cols="30" rows="3" disabled><?= $data['keterangan'] ?></textarea>
+                                </div>
+                                <?php if ($_GET['jenis_mutasi'] === 'MASUK') : ?>
+                                    <div class="form-group">
+                                        <label for="sk_mutasi">SK Mutasi</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="sk_mutasi" name="sk_mutasi" accept=".pdf" onchange="preview(this)" required>
+                                                <label class="custom-file-label" for="sk_mutasi">Pilih File</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nota_usul">Nota Usul</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="nota_usul" name="nota_usul" accept=".pdf" onchange="preview(this)" required>
+                                                <label class="custom-file-label" for="nota_usul">Pilih File</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end">
+                                <a href="?page=<?= $_GET['page'] ?>" class="btn btn-secondary mr-2">Kembali</a>
+                                <?php if ($_GET['jenis_mutasi'] === 'MASUK') : ?>
+                                    <button type="submit" name="selesai" class="btn btn-primary" onclick="return confirm('Are you sure?')">Simpan</button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             <?php endif; ?>
             <div class="col-md-6">
@@ -317,31 +482,66 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                         <iframe src="<?= $dokumen10 ?>" id="preview-dokumen10" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
+                <?php if ($_GET['jenis_mutasi'] === 'MASUK') : ?>
+                    <?php if ($_SESSION['status'] === 'PEGAWAI' && $data['status'] === "SELESAI") : ?>
+                        <div class="card card-success collapsed-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Dokumen SK Mutasi</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="height: 640px; display: none;">
+                                <iframe src="<?= $dokumen11; ?>" id="preview-sk_mutasi" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                        <div class="card card-success collapsed-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Dokumen Nota Usul</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="height: 640px; display: none;">
+                                <iframe src="<?= $dokumen12; ?>" id="preview-nota_usul" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['status'] === 'ADMIN') : ?>
+                        <div class="card card-primary collapsed-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Dokumen SK Mutasi</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="height: 640px; display: none;">
+                                <iframe src="<?= $dokumen11; ?>" id="preview-sk_mutasi" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                        <div class="card card-primary collapsed-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Dokumen Nota Usul</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="height: 640px; display: none;">
+                                <iframe src="<?= $dokumen12; ?>" id="preview-nota_usul" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
-<script>
-    const preview = (input) => {
-        const preview = document.querySelector('#preview-' + input.getAttribute('id'));
-
-        let already_open = false;
-        document.querySelectorAll(".btn-tool").forEach(element => {
-            if (
-                element.children[0].getAttribute("class").split(" ")[1] === "fa-minus" &&
-                element.parentElement.parentElement.nextElementSibling.children[0].getAttribute("id") != ("preview-" + input.getAttribute('id'))
-            ) element.click();
-            if (
-                element.children[0].getAttribute("class").split(" ")[1] === "fa-minus" &&
-                element.parentElement.parentElement.nextElementSibling.children[0].getAttribute("id") == ("preview-" + input.getAttribute('id'))
-            ) already_open = true;
-        });
-        const oFReader = new FileReader();
-        oFReader.readAsDataURL(input.files[0]);
-        oFReader.onload = function(oFREvent) {
-            preview.src = oFREvent.target.result;
-            if (!already_open) preview.parentElement.previousElementSibling.children[1].children[0].click();
-            input.nextElementSibling.innerHTML = input.files[0].name;
-        }
-    }
-</script>
+<script src="assets/js/document-preview.js"></script>

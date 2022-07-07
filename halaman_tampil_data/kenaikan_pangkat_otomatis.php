@@ -50,11 +50,11 @@
                             <td class="text-center" style="vertical-align: middle;"><?= $row['tanggal_pengajuan'] ?></td>
                             <td class="text-center" style="vertical-align: middle;">
                                 <?php if ($row['status'] === "PENGAJUAN") : ?>
-                                    <span class="badge badge-warning"><?= $row['status'] ?></span>
+                                    <span class="badge badge-warning">Menunggu Konfirmasi</span>
                                 <?php elseif ($row['status'] === "DITERIMA") : ?>
-                                    <span class="badge badge-success"><?= $row['status'] ?></span>
+                                    <span class='badge badge-success'>Diterima</span>
                                 <?php elseif ($row['status'] === "DITOLAK") : ?>
-                                    <span class="badge badge-danger"><?= $row['status'] ?></span>
+                                    <span class="badge badge-danger">Ditolak</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">

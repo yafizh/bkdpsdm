@@ -9,6 +9,8 @@ if (isset($_GET['id'])) {
     $dokumen5 = $data['skp_2_tahun_terakhir'];
     $dokumen6 = $data['izajah_terakhir'];
     $dokumen7 = $data['surat_pernyataan_bebas_hukuman'];
+    $dokumen8 = $data['nota_usul'];
+    $dokumen9 = $data['sk_mutasi'];
 } else {
     echo "<script>alert('id tidak ditemukan');</script>";
     echo "<script>window.location.href = '?page=skpd';</script>";
@@ -50,6 +52,37 @@ if ($_SESSION['status'] === 'PIMPINAN') {
         } else echo "Error: " . $q . "<br>" . $mysqli->error;
     }
 }
+
+if ($_SESSION['status'] === 'ADMIN') {
+    if (isset($_POST['selesai'])) {
+
+        $target_dir = "uploads/";
+
+        if (file_exists($dokumen8)) unlink($dokumen8);
+        $dokumen8 = $target_dir . Date("YmdHis") . "8." . strtolower(pathinfo(basename($_FILES["sk_mutasi"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["sk_mutasi"]["tmp_name"], $dokumen8);
+
+        if (file_exists($dokumen9)) unlink($dokumen9);
+        $dokumen9 = $target_dir . Date("YmdHis") . "9." . strtolower(pathinfo(basename($_FILES["nota_usul"]["name"]), PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["nota_usul"]["tmp_name"], $dokumen9);
+
+        $q = "
+        UPDATE 
+            mutasi_skpd 
+        SET 
+            tanggal_selesai='" . Date("Y-m-d H:i:s") . "',
+            sk_mutasi='$dokumen8',
+            nota_usul='$dokumen9',
+            status='SELESAI'  
+        WHERE 
+            id=" . $_GET['id'] . "
+        ";
+        if ($mysqli->query($q)) {
+            echo "<script>alert('Berhasil menyerahkan SK Mutasi dan Nota Usul');</script>";
+            echo "<script>window.location.href = '?page=skpd';</script>";
+        } else echo "Error: " . $q . "<br>" . $mysqli->error;
+    }
+}
 ?>
 <section class="content-header">
     <div class="container-fluid">
@@ -74,7 +107,7 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Dokumen</h3>
+                            <h3 class="card-title">Riwayat Pengajuan</h3>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
@@ -88,18 +121,20 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                             <div class="form-group">
                                 <label class="d-block">Status Pengajuan</label>
                                 <label>
-                                    <?php
-                                    if ($data['status'] == "PENGAJUAN") {
-                                        echo "<span class='badge badge-warning'>Menunggu Konfirmasi</span>";
-                                    } elseif ($data['status'] == "DITOLAK") {
-                                        echo "<span class='badge badge-danger'>Ditolak</span>";
-                                    } elseif ($data['status'] == "DITERIMA") {
-                                        echo "<span class='badge badge-success'>Diterima</span>";
-                                    }
-                                    ?>
+                                    <?php if ($data['status'] === "PENGAJUAN") : ?>
+                                        <span class='badge badge-warning'>Menunggu Konfirmasi</span>
+                                    <?php elseif ($data['status'] === "DITERIMA") : ?>
+                                        <span class='badge badge-success'>Diterima</span>
+                                        <span class='badge badge-warning'>Menunggu SK Mutasi</span>
+                                        <span class='badge badge-warning'>Menunggu Nota Usul</span>
+                                    <?php elseif ($data['status'] === "DITOLAK") : ?>
+                                        <span class='badge badge-danger'>Ditolak</span>
+                                    <?php elseif ($data['status'] === "SELESAI") : ?>
+                                        <span class='badge badge-success'>Selesai</span>
+                                    <?php endif; ?>
                                 </label>
                             </div>
-                            <?php if ($data['status'] == "DITERIMA" || $data['status'] == "DITOLAK") : ?>
+                            <?php if ($data['status'] !== "PENGAJUAN") : ?>
                                 <div class="form-group">
                                     <label for="tanggal_verifikasi">Tanggal Verifikasi</label>
                                     <input type="text" class="form-control" id="tanggal_verifikasi" value="<?= date_format(date_create(explode(" ", $data['tanggal_verifikasi'])[0]), "d-m-Y"); ?>" disabled>
@@ -111,6 +146,16 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                                 <div class="form-group">
                                     <label for="waktu_pengajuan">Keterangan</label>
                                     <textarea class="form-control" cols="30" rows="3" readonly><?= $data['keterangan']; ?></textarea>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($data['status'] === "SELESAI") : ?>
+                                <div class="form-group">
+                                    <label for="tanggal_selesai">Tanggal Disetujui</label>
+                                    <input type="text" class="form-control" id="tanggal_selesai" value="<?= date_format(date_create(explode(" ", $data['tanggal_selesai'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_selesai">Waktu Disetujui</label>
+                                    <input type="text" class="form-control" id="waktu_selesai" value="<?= explode(" ", $data['tanggal_selesai'])[1]; ?>" disabled>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -129,7 +174,7 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Dokumen</h3>
+                            <h3 class="card-title">Riwayat Pengajuan</h3>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
@@ -154,7 +199,7 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-end">
-                            <a href="?page=struktural" class="btn btn-secondary mr-2">Kembali</a>
+                            <a href="?page=skpd" class="btn btn-secondary mr-2">Kembali</a>
                             <form action="" method="POST" class="d-inline">
                                 <textarea name="keterangan_tolak" hidden></textarea>
                                 <button type="submit" name="tolak" class="btn btn-danger" onclick="return confirm('Are you sure?')">Tolak</button>
@@ -172,6 +217,84 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                             })
                         </script>
                     </div>
+                </div>
+            <?php elseif ($_SESSION['status'] === 'ADMIN') : ?>
+                <div class="col-md-6">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Riwayat Pengajuan</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="nip">NIP</label>
+                                    <input type="text" class="form-control" id="nip" value="<?= $data['nip'] ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama">Nama Pegawai</label>
+                                    <input type="text" class="form-control" id="nama" value="<?= $data['nama'] ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_pengajuan">Tanggal Pengajaun</label>
+                                    <input type="text" class="form-control" id="tanggal_pengajuan" value="<?= date_format(date_create(explode(" ", $data['tanggal_pengajuan'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_pengajuan">Waktu Pengajuan</label>
+                                    <input type="text" class="form-control" id="waktu_pengajuan" value="<?= explode(" ", $data['tanggal_pengajuan'])[1]; ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Status Pengajuan</label>
+                                    <label>
+                                        <?php if ($data['status'] === "PENGAJUAN") : ?>
+                                            <span class='badge badge-warning'>Menunggu Konfirmasi</span>
+                                        <?php elseif ($data['status'] === "DITERIMA") : ?>
+                                            <span class='badge badge-success'>Diterima</span>
+                                            <span class='badge badge-warning'>Menunggu SK Mutasi</span>
+                                            <span class='badge badge-warning'>Menunggu Nota Usul</span>
+                                        <?php elseif ($data['status'] === "DITOLAK") : ?>
+                                            <span class='badge badge-danger'>Ditolak</span>
+                                        <?php elseif ($data['status'] === "SELESAI") : ?>
+                                            <span class='badge badge-success'>Selesai</span>
+                                        <?php endif; ?>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_verifikasi">Tanggal Verifikasi</label>
+                                    <input type="text" class="form-control" id="tanggal_verifikasi" value="<?= date_format(date_create(explode(" ", $data['tanggal_verifikasi'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_verifikasi">Waktu Verifikasi</label>
+                                    <input type="text" class="form-control" id="waktu_verifikasi" value="<?= explode(" ", $data['tanggal_verifikasi'])[1]; ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_pengajuan">Keterangan</label>
+                                    <textarea id="keterangan" class="form-control" cols="30" rows="3" disabled><?= $data['keterangan'] ?></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sk_mutasi">SK Mutasi</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="sk_mutasi" name="sk_mutasi" accept=".pdf" onchange="preview(this)" required>
+                                            <label class="custom-file-label" for="sk_mutasi">Pilih File</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nota_usul">Nota Usul</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="nota_usul" name="nota_usul" accept=".pdf" onchange="preview(this)" required>
+                                            <label class="custom-file-label" for="nota_usul">Pilih File</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end">
+                                <a href="?page=skpd" class="btn btn-secondary mr-2">Kembali</a>
+                                <button type="submit" name="selesai" class="btn btn-primary" onclick="return confirm('Are you sure?')">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             <?php endif; ?>
             <div class="col-md-6">
@@ -258,7 +381,6 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                         <iframe src="<?= $dokumen6 ?>" id="preview-dokumen6" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
-
                 <div class="card card-primary collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Dokumen Surat Pernyataaan Bebas Hukuman</h3>
@@ -272,31 +394,64 @@ if ($_SESSION['status'] === 'PIMPINAN') {
                         <iframe src="<?= $dokumen7 ?>" id="preview-dokumen7" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                     </div>
                 </div>
+                <?php if ($_SESSION['status'] === 'PEGAWAI' && $data['status'] === "SELESAI") : ?>
+                    <div class="card card-success collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dokumen SK Mutasi</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="height: 640px; display: none;">
+                            <iframe src="<?= $dokumen8; ?>" id="preview-sk_mutasi" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                    <div class="card card-success collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dokumen Nota Usul</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="height: 640px; display: none;">
+                            <iframe src="<?= $dokumen9; ?>" id="preview-nota_usul" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php if ($_SESSION['status'] === 'ADMIN') : ?>
+                    <div class="card card-primary collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dokumen SK Mutasi</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="height: 640px; display: none;">
+                            <iframe src="<?= $dokumen8; ?>" id="preview-sk_mutasi" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                    <div class="card card-primary collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dokumen Nota Usul</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="height: 640px; display: none;">
+                            <iframe src="<?= $dokumen9; ?>" id="preview-nota_usul" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
-<script>
-    const preview = (input) => {
-        const preview = document.querySelector('#preview-' + input.getAttribute('id'));
-
-        let already_open = false;
-        document.querySelectorAll(".btn-tool").forEach(element => {
-            if (
-                element.children[0].getAttribute("class").split(" ")[1] === "fa-minus" &&
-                element.parentElement.parentElement.nextElementSibling.children[0].getAttribute("id") != ("preview-" + input.getAttribute('id'))
-            ) element.click();
-            if (
-                element.children[0].getAttribute("class").split(" ")[1] === "fa-minus" &&
-                element.parentElement.parentElement.nextElementSibling.children[0].getAttribute("id") == ("preview-" + input.getAttribute('id'))
-            ) already_open = true;
-        });
-        const oFReader = new FileReader();
-        oFReader.readAsDataURL(input.files[0]);
-        oFReader.onload = function(oFREvent) {
-            preview.src = oFREvent.target.result;
-            if (!already_open) preview.parentElement.previousElementSibling.children[1].children[0].click();
-            input.nextElementSibling.innerHTML = input.files[0].name;
-        }
-    }
-</script>
+<script src="assets/js/document-preview.js"></script>

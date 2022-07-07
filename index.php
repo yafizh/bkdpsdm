@@ -2,7 +2,7 @@
 session_start();
 date_default_timezone_set("Asia/Kuala_Lumpur");
 include_once "templates/header.php";
-include_once "utils/utils.php";
+// include_once "utils/utils.php";
 include_once "database/koneksi.php";
 if (isset($_SESSION['status'])) {
     include_once "templates/navbar.php";
@@ -19,6 +19,8 @@ if (isset($_SESSION['status'])) {
                         include_once "halaman_edit_data/pegawai.php";
                     elseif ($_GET['method'] === 'hapus')
                         include_once "halaman_hapus_data/pegawai.php";
+                    elseif ($_GET['method'] === 'detail')
+                        include_once "halaman_detail/pegawai.php";
                 } else
                     include_once "halaman_tampil_data/pegawai.php";
                 break;

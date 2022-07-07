@@ -15,9 +15,16 @@ INSERT INTO `user` (
     password,
     status 
 ) VALUES 
-("admin", "admin", "ADMIN"),
-("pimpinan", "pimpinan", "PIMPINAN"),
-("nuril", "nuril", "PEGAWAI");
+("198604072011012007", "198604072011012007", "ADMIN"),
+("199410302018081001", "199410302018081001", "PIMPINAN"),
+("196104151986081003", "196104151986081003", "PEGAWAI"),
+("199510011970210001", "199510011970210001", "PEGAWAI"),
+("196608121989022002", "196608121989022002", "PEGAWAI"),
+("196703071986012001", "196703071986012001", "PEGAWAI"),
+("196603171987031012", "196603171987031012", "PEGAWAI"),
+("197605072031210005", "197605072031210005", "PEGAWAI"),
+("196910131992310060", "196910131992310060", "PEGAWAI"),
+("199601101890230001", "199601101890230001", "PEGAWAI");
 
 CREATE TABLE `pegawai` (
     id INT NOT NULL AUTO_INCREMENT,
@@ -48,7 +55,16 @@ INSERT INTO `pegawai` (
     tanggal_lahir, 
     gambar  
 ) VALUES 
-(3, "1111", "Nuril Maulida", 'pangkat', 'gol', 'nomor_telepon', '2020-01-01', 'jabatan', 'unit_kerja', '1980-01-01', '');
+(1, "198604072011012007", "Erma Yunita S.Pd", 'Penata Muda Tk.I', 'III/b', '085753445678', '2014-10-01', '', 'SMPN 2 SUNGAI TABUK', '1986-04-07', ''),
+(2, "199410302018081001", "Muhammad Pauji, S.STP", 'Penata Muda', 'III/a', '087756908544', '2020-10-01', 'Analisis Tata Praja', 'Biro Kepegawaian', '1994-10-30', ''),
+(3, "196104151986081003", "Sarbani S.E., M.A.P", 'Pembina Utama Muda', 'IV/c', '082134567800', '2015-02-10', 'Kepala Badan', 'Badan Kepegawaian Daerah Pengembangan Sumber Daya Manusia Kab.Banjar', '1961-04-15', ''),
+(4, "199510011970210001", "Muhammad Ardian S.Pd", 'Penata Muda', 'III/a', '085367908766', '2014-01-01', 'Pengelola kepegawaian', '', '1995-10-01', ''),
+(5, "196608121989022002", "Erna Marlina M.Pd", 'Pembina Tk.I', 'IV/b', '081321446790', '2016-01-12', 'Guru Madya', 'SMAN 1 MATARAMAN', '1966-08-12', ''),
+(6, "196703071986012001", "Pina Oktavia S.Sos. M.Pd", 'Pembina', 'IV/a', '085351445231', '2015-12-01', '', 'Dinas Pendidikan Kab.Banjar', '1967-03-07', ''),
+(7, "196603171987031012", "Muzazi,S.Sos. M.M", 'Pembina', 'IV/a', '085251237655', '2014-12-01', 'Kabid Bina Pendidik dan Tenaga Pendidikan', 'Dinas Pendidikan Kab.Banjar', '1966-03-17', ''),
+(8, "197605072031210005", "Rahmad Renaldi ST", 'Pembina', 'IV/b', '083189076657', '2019-01-10', 'Kepala Dinas', 'Dinas Pendidikan Kab.Banjar', '1976-05-07', ''),
+(9, "196910131992310060", "Reza Maulana S.Pd", 'Penata Tk.I', 'III/b', '085377908765', '2015-08-13', 'Kepala Sub Bagian Umum dan Aparatur', 'Kecamatan Putussibau Utara', '1969-10-13', ''),
+(10, "199601101890230001", "Hamdiah S.Pd", 'Penata Muda Tk.I', 'III/a', '089766907866', '', 'Penata Laporan Keuangan', 'Dinas Pendidikan Kab.Kapuas Hulu', '1996-01-10', '');
 
 CREATE TABLE `kenaikan_pangkat_otomatis` (
     id INT NOT NULL AUTO_INCREMENT,
@@ -63,6 +79,7 @@ CREATE TABLE `kenaikan_pangkat_otomatis` (
     sk_cpns_pns VARCHAR(255) NOT NULL,
     tanggal_pengajuan DATETIME NOT NULL,
     tanggal_verifikasi DATETIME NULL,
+    tanggal_selesai DATETIME NULL,
     status ENUM('PENGAJUAN', 'DITERIMA', 'DITOLAK', 'SELESAI') NOT NULL,
     keterangan TEXT NULL,
     sk_kenaikan_pangkat VARCHAR(255) NULL,
@@ -80,6 +97,7 @@ CREATE TABLE `kenaikan_pangkat_struktural` (
     skp VARCHAR(255) NOT NULL,
     tanggal_pengajuan DATETIME NOT NULL,
     tanggal_verifikasi DATETIME NULL,
+    tanggal_selesai DATETIME NULL,
     status ENUM('PENGAJUAN', 'DITERIMA', 'DITOLAK', 'SELESAI') NOT NULL,
     keterangan TEXT NULL,
     sk_kenaikan_pangkat VARCHAR(255) NULL,
@@ -100,6 +118,7 @@ CREATE TABLE `kenaikan_pangkat_fungsional` (
     ktp VARCHAR(255) NOT NULL,
     tanggal_pengajuan DATETIME NOT NULL,
     tanggal_verifikasi DATETIME NULL,
+    tanggal_selesai DATETIME NULL,
     status ENUM('PENGAJUAN', 'DITERIMA', 'DITOLAK', 'SELESAI') NOT NULL,
     keterangan TEXT NULL,
     sk_kenaikan_pangkat VARCHAR(255) NULL,
@@ -118,6 +137,7 @@ CREATE TABLE `mutasi_skpd` (
     surat_pernyataan_bebas_hukuman VARCHAR(255) NOT NULL,
     tanggal_pengajuan DATETIME NOT NULL,
     tanggal_verifikasi DATETIME NULL,
+    tanggal_selesai DATETIME NULL,
     status ENUM('PENGAJUAN', 'DITERIMA', 'DITOLAK', 'SELESAI') NOT NULL,
     keterangan TEXT NULL,
     nota_usul VARCHAR(255) NULL,
@@ -142,6 +162,7 @@ CREATE TABLE `mutasi` (
     skp_2_tahun_terakhir VARCHAR(255) NOT NULL,
     tanggal_pengajuan DATETIME NOT NULL,
     tanggal_verifikasi DATETIME NULL,
+    tanggal_selesai DATETIME NULL,
     status ENUM('PENGAJUAN', 'DITERIMA', 'DITOLAK', 'SELESAI') NOT NULL,
     keterangan TEXT NULL,
     nota_usul VARCHAR(255) NULL,

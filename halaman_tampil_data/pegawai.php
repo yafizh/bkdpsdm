@@ -29,8 +29,9 @@
                     <tr>
                         <th class="text-center">NIP</th>
                         <th class="text-center">Nama</th>
+                        <th class="text-center">Nomor Telepon</th>
                         <th class="text-center">Jabatan</th>
-                        <th class="text-center">Unit Kerja</th>
+                        <th class="text-center">TMT</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -45,8 +46,9 @@
                         <tr>
                             <td class="text-center" style="vertical-align: middle;"><?= $row['nip'] ?></td>
                             <td style="vertical-align: middle;"><?= $row['nama'] ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= $row['nomor_telepon'] ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= $row['jabatan'] ?></td>
-                            <td class="text-center" style="vertical-align: middle;"><?= $row['unit_kerja'] ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= $row['tmt'] ?></td>
                             <td class="text-center">
                                 <a href="?page=pegawai&method=detail&id=<?= $row['id'] ?>" class="btn btn-sm btn-info"><i class="far fa-eye"></i></a>
                                 <a href="?page=pegawai&method=edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="far fa-edit"></i></a>
