@@ -54,7 +54,8 @@
                                 <?php elseif ($row['status'] === "DITERIMA") : ?>
                                     <span class='badge badge-success'>Diterima</span>
                                 <?php elseif ($row['status'] === "DITOLAK") : ?>
-                                    <span class="badge badge-danger">Ditolak</span>
+                                <?php elseif ($row['status'] === "SELESAI") : ?>
+                                    <span class="badge badge-success">Selesai</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">

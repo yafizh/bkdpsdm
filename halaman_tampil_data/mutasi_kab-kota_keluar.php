@@ -24,11 +24,11 @@
             <table id="example2" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th class="tect-center">NIP</th>
-                        <th class="tect-center">Nama</th>
-                        <th class="tect-center">Tanggal Pengajuan</th>
-                        <th class="tect-center">Status</th>
-                        <th class="tect-center">Aksi</th>
+                        <th class="text-center">NIP</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">Tanggal Pengajuan</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

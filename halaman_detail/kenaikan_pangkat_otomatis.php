@@ -144,6 +144,16 @@ if ($_SESSION['status'] === 'ADMIN') {
                                     <textarea class="form-control" cols="30" rows="3" readonly><?= $data['keterangan']; ?></textarea>
                                 </div>
                             <?php endif; ?>
+                            <?php if ($data['status'] === "SELESAI") : ?>
+                                <div class="form-group">
+                                    <label for="tanggal_selesai">Tanggal Disetujui</label>
+                                    <input type="text" class="form-control" id="tanggal_selesai" value="<?= date_format(date_create(explode(" ", $data['tanggal_selesai'])[0]), "d-m-Y"); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waktu_selesai">Waktu Disetujui</label>
+                                    <input type="text" class="form-control" id="waktu_selesai" value="<?= explode(" ", $data['tanggal_selesai'])[1]; ?>" disabled>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <div class="card-footer d-flex justify-content-end">
                             <a href="?page=otomatis" class="btn btn-secondary ml-2">Kembali</a>
