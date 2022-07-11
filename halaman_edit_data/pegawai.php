@@ -153,7 +153,7 @@ if (isset($_POST['submit'])) {
                             <h3 class="card-title">Preview Gambar</h3>
                         </div>
                         <div class="card-body d-flex justify-content-center" style="height: 470.5px; padding: 20px;">
-                            <img id="preview" src="<?= $gambar; ?>">
+                            <img id="preview" src="<?= $gambar; ?>" class="w-50" style="object-fit: cover;">
                         </div>
                     </div>
 

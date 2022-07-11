@@ -1,4 +1,3 @@
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -12,13 +11,11 @@
                 </ol>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
 
-<!-- Main content -->
 <section class="content">
 
-    <!-- Default box -->
     <div class="card">
         <div class="card-header">
             <a href="?page=spj_kenaikan_pangkat&method=tambah" class="btn btn-primary float-right">Tambah</a>
@@ -38,22 +35,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
     </div>
-    <!-- /.card -->
 
 </section>
-<!-- /.content -->
-<script>
-    $(function() {
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
-    });
-</script>

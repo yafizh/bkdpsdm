@@ -2,7 +2,7 @@
 session_start();
 date_default_timezone_set("Asia/Kuala_Lumpur");
 include_once "templates/header.php";
-// include_once "utils/utils.php";
+include_once "utils/utils.php";
 include_once "database/koneksi.php";
 if (isset($_SESSION['status'])) {
     include_once "templates/navbar.php";
@@ -149,6 +149,9 @@ if (isset($_SESSION['status'])) {
                         include_once "halaman_hapus_data/spj.php";
                 } else
                     include_once "halaman_tampil_data/spj_kenaikan_pangkat.php";
+                break;
+            case "laporan":
+                include_once "halaman_laporan/index.php";
                 break;
             default:
                 include_once "beranda.php";

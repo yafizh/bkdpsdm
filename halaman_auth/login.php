@@ -5,14 +5,15 @@ if (isset($_POST['submit'])) {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
-	$sql = "SELECT user.*, pegawai.id AS id_pegawai, pegawai.nama FROM user LEFT JOIN pegawai ON user.id=pegawai.id_user WHERE user.username='$username' AND user.password='$password'";
+	$sql = "SELECT user.*, pegawai.id AS id_pegawai, pegawai.nama, pegawai.gambar FROM user LEFT JOIN pegawai ON user.id=pegawai.id_user WHERE user.username='$username' AND user.password='$password'";
 	if ($result = $mysqli->query($sql)) {
 		if ($result->num_rows) {
 			$user = $result->fetch_assoc();
 			$_SESSION['nama'] = $user['nama'];
 			$_SESSION['id_pegawai'] = $user['id_pegawai'];
-			$_SESSION['id_user'] = $user['id_user'];
+			$_SESSION['id'] = $user['id'];
 			$_SESSION['status'] = $user['status'];
+			$_SESSION['gambar'] = $user['gambar'];
 			header('Location: ../index.php');
 		} else echo "<script>alert('Username atau Password Salah!');</script>";
 	} else echo "Error: " . $sql . "<br>" . $mysqli->error;

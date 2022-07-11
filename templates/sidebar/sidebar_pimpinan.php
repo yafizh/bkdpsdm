@@ -1,30 +1,27 @@
-<!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="assets/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                <img style="width: 55px; height: 55px;" src="<?= $_SESSION['gambar'] == "" ? "assets/img/user2-160x160.jpg" : $_SESSION['gambar'] ?>" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="#" class="d-block"><?= isset($_SESSION['nama']) ? $_SESSION['nama'] : "Unknown" ?></a>
+                <a href="#" class="d-block"><?= $_SESSION['status']; ?></a>
             </div>
         </div>
 
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="?page=dashboard" class="nav-link <?= isset($_GET['page']) ? (($_GET['page'] === "dashboard") ? "active" : "")  : "active" ?>">
-                        <i class="nav-icon far fa-calendar-alt"></i>
+                        <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-header">PENGAJUAN</li>
                 <li class="nav-item <?= isset($_GET['page']) ? ((in_array($_GET['page'], ['otomatis', 'struktural', 'fungsional'])) ? "menu-open" : "")  : "" ?>">
                     <a href="#" class="nav-link <?= isset($_GET['page']) ? ((in_array($_GET['page'], ['otomatis', 'struktural', 'fungsional'])) ? "active" : "")  : "" ?>">
-                        <i class="nav-icon far fa-envelope"></i>
+                        <i class="nav-icon fas fa-level-up-alt"></i>
                         <p>
                             Kenaikan Pangkat
                             <i class="fas fa-angle-left right"></i>
@@ -53,7 +50,7 @@
                 </li>
                 <li class="nav-item <?= isset($_GET['page']) ? ((in_array($_GET['page'], ['skpd', 'kab-kota_masuk', 'kab-kota_keluar', 'provinsi_masuk', 'provinsi_keluar'])) ? "menu-open" : "")  : "" ?>">
                     <a href="#" class="nav-link <?= isset($_GET['page']) ? ((in_array($_GET['page'], ['skpd', 'kab-kota_masuk', 'kab-kota_keluar', 'provinsi_masuk', 'provinsi_keluar'])) ? "active" : "")  : "" ?>">
-                        <i class="nav-icon far fa-envelope"></i>
+                        <i class="nav-icon fas fa-exchange-alt"></i>
                         <p>
                             Mutasi
                             <i class="fas fa-angle-left right"></i>
