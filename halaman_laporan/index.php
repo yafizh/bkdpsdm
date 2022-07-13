@@ -56,7 +56,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Laporan Surat Pertanggung Jawaban</h3>
                     </div>
-                    <form action="" method="POST" target="_blank">
+                    <form action="halaman_laporan/spj.php" method="POST" target="_blank">
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="dari">Dari</label>
@@ -66,9 +66,17 @@
                                 <label for="sampai">Sampai</label>
                                 <input type="date" class="form-control" id="sampai" name="sampai" value="<?= Date("Y-m-d") ?>">
                             </div>
+                            <div class="form-group">
+                                <label for="jenis_spj">Jenis SPJ</label>
+                                <select class="form-control" id="jenis_spj" name="jenis_spj">
+                                    <option value="">Semua Jenis</option>
+                                    <option value="KENAIKAN PANGKAT">Kenaikan Pangkat</option>
+                                    <option value="MUTASI">Mutasi</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary float-right" disabled>Cetak</button>
+                            <button type="submit" class="btn btn-primary float-right">Cetak</button>
                         </div>
                     </form>
                 </div>

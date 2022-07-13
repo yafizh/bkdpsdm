@@ -28,8 +28,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item <?= isset($_GET['page']) ? ((in_array($_GET['page'], ['spj_kenaikan_pangkat', 'spj_mutasi'])) ? "menu-open" : "")  : "" ?>">
+                    <a href="#" class="nav-link <?= isset($_GET['page']) ? ((in_array($_GET['page'], ['spj_kenaikan_pangkat', 'spj_mutasi'])) ? "active" : "")  : "" ?>">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>
                             SPJ
@@ -38,13 +38,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="?page=spj_kenaikan_pangkat" class="nav-link">
+                            <a href="?page=spj_kenaikan_pangkat" class="nav-link <?= isset($_GET['page']) ? (($_GET['page'] === "spj_kenaikan_pangkat") ? "active" : "")  : "" ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>SPJ Kenaikan Pangkat</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="?page=spj_mutasi" class="nav-link">
+                            <a href="?page=spj_mutasi" class="nav-link <?= isset($_GET['page']) ? (($_GET['page'] === "spj_mutasi") ? "active" : "")  : "" ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>SPJ Mutasi</p>
                             </a>

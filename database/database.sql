@@ -169,3 +169,19 @@ CREATE TABLE `mutasi` (
     sk_mutasi VARCHAR(255) NULL,
     PRIMARY KEY(id)
 );
+
+CREATE TABLE `spj` (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_pegawai INT NOT NULL,
+    urusan_pemerintah VARCHAR(255) NOT NULL,
+    program VARCHAR(255) NOT NULL,
+    keperluan VARCHAR(255) NOT NULL,
+    kode_rekening VARCHAR(255) NOT NULL,
+    unit_organisasi VARCHAR(255) NOT NULL,
+    sub_unit_organisasi VARCHAR(255) NOT NULL,
+    kegiatan VARCHAR(255) NOT NULL,
+    jumlah_uang BIGINT NOT NULL,
+    tanggal_kegiatan DATE NOT NULL,
+    jenis_spj ENUM('MUTASI', 'KENAIKAN PANGKAT') NOT NULL,
+    PRIMARY KEY(id)
+);

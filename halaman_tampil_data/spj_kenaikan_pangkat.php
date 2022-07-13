@@ -24,14 +24,38 @@
             <table id="example2" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Tanggal Pengajuan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="text-center">No</th>
+                        <th class="text-center">NIP Pegawai</th>
+                        <th class="text-center">Nama Pegawai</th>
+                        <th class="text-center">Tanggal Kegiatan</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php
+                    $q = "SELECT spj.*, pegawai.nama, pegawai.nip FROM spj INNER JOIN pegawai ON spj.id_pegawai=pegawai.id WHERE spj.jenis_spj='KENAIKAN PANGKAT' ORDER BY spj.id DESC";
+                    $no = 1;
+                    if ($result = $mysqli->query($q)) {
+                    } else echo "Error: " . $q . "<br>" . $mysqli->error;
+                    ?>
+                    <?php while ($row = $result->fetch_assoc()) : ?>
+                        <tr>
+                            <td class="text-center" style="vertical-align: middle;"><?= $no++; ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= $row['nip'] ?></td>
+                            <td style="vertical-align: middle;"><?= $row['nama'] ?></td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <?= explode('-',$row['tanggal_kegiatan'])[2] ?> <?= BULAN_DALAM_INDONESIA[explode('-',$row['tanggal_kegiatan'])[1] - 1] ?> <?= explode('-',$row['tanggal_kegiatan'])[0] ?>
+                            </td>
+                            <td class="text-center">
+                                <a href="halaman_laporan/spj.php?id=<?= $row['id'] ?>" target="_blank" class="btn btn-sm btn-secondary"><i class="far fa-eye"></i></a>
+                                <a href="?page=spj_kenaikan_pangkat&method=detail&id=<?= $row['id'] ?>" class="btn btn-sm btn-info"><i class="far fa-eye"></i></a>
+                                <a href="?page=spj_kenaikan_pangkat&method=edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="far fa-edit"></i></a>
+                                <form action="?page=spj_kenaikan_pangkat&method=hapus&id=<?= $row['id'] ?>" method="POST" class="d-inline">
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="far fa-trash-alt"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>

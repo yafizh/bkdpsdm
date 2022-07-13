@@ -30,16 +30,12 @@
 		<table>
 			<tr>
 				<td>Laporan</td>
-				<?php if ($_GET['mutasi'] === 'skpd') : ?>
-					<td>: Mutasi SKPD</td>
-				<?php elseif ($_GET['mutasi'] === 'kab-kota_masuk') : ?>
-					<td>: Mutasi Kabupaten/Kota Masuk</td>
-				<?php elseif ($_GET['mutasi'] === 'kab-kota_keluar') : ?>
-					<td>: Mutasi Kabupaten/Kota Keluar</td>
-				<?php elseif ($_GET['mutasi'] === 'provinsi_masuk') : ?>
-					<td>: Mutasi Provinsi Masuk</td>
-				<?php elseif ($_GET['mutasi'] === 'provinsi_keluar') : ?>
-					<td>: Mutasi Provinsi Keluar</td>
+				<?php if ($_POST['jenis_spj'] === 'KENAIKAN PANGKAT') : ?>
+					<td>: Surat Penanggung Jawaban Kenaikan Pangkat</td>
+				<?php elseif ($_POST['jenis_spj'] === 'MUTASI') : ?>
+					<td>: Surat Penanggung Jawaban Mutasi</td>
+				<?php else: ?>
+					<td>: Surat Penanggung Jawaban Kenikan Pangkat dan Mutasi</td>
 				<?php endif; ?>
 			</tr>
 			<tr>
@@ -58,23 +54,20 @@
 				<th>No</th>
 				<th>NIP</th>
 				<th>Nama</th>
-				<th>Tanggal Pengajuan</th>
-				<th>Tanggal Verifikasi</th>
-				<th>Tanggal Selesai</th>
+				<th>Tanggal Kegiatan</th>
 			</thead>
 			<tbody>
 				<?php
 				$dari = $_POST['dari'];
 				$sampai = $_POST['sampai'];
-				$table = "";
-				if ($_GET['mutasi'] === 'skpd') $table = "mutasi_skpd";
-				else $table = "mutasi";
+				$table = "spj";
+				if ($_POST['jenis_spj'] === 'KENAIKAN PANGKAT') $jenis_spj = "KENAIKAN PANGKAT";
+				elseif ($_POST['jenis_spj'] === 'MUTASI') $jenis_spj = "MUTASI";
+				else $jenis_spj = "";
 				$q = "
 					SELECT 
 						$table.id, 
-						DATE($table.tanggal_pengajuan) AS tanggal_pengajuan, 
-						DATE($table.tanggal_verifikasi) AS tanggal_verifikasi, 
-						DATE($table.tanggal_selesai) AS tanggal_selesai, 
+						tanggal_kegiatan, 
 						pegawai.nama AS nama_pegawai, 
 						pegawai.nip AS nip_pegawai 
 					FROM 
@@ -82,11 +75,11 @@
 					INNER JOIN 
 						pegawai 
 					ON 
-						pegawai.id=$table.id_pegawai " .
-					((isset($_GET['jenis_mutasi']) && isset($_GET['tujuan_mutasi'])) ? "WHERE $table.tujuan_mutasi='" . $_GET['tujuan_mutasi'] . "' AND $table.jenis_mutasi='" . $_GET['jenis_mutasi'] . "'" : "")
-					. " 
+						pegawai.id=$table.id_pegawai  
 					WHERE 
-						$table.tanggal_pengajuan >= '$dari' AND $table.tanggal_pengajuan <= '$sampai' 
+						$table.tanggal_kegiatan >= '$dari' AND $table.tanggal_kegiatan <= '$sampai' 
+						AND 
+						$table.jenis_spj LIKE '%$jenis_spj%' 
 					ORDER BY 
 						$table.id";
 
@@ -100,14 +93,12 @@
 							<td class="text-center"><?= $no++; ?></td>
 							<td class="text-center"><?= $row['nip_pegawai']; ?></td>
 							<td><?= $row['nama_pegawai']; ?></td>
-							<td class="text-center"><?= explode('-', $row['tanggal_pengajuan'])[2] . " " . BULAN_DALAM_INDONESIA[explode('-', $row['tanggal_pengajuan'])[1] - 1] . " " . explode('-', $row['tanggal_pengajuan'])[0] ?></td>
-							<td class="text-center"><?= explode('-', $row['tanggal_verifikasi'])[2] . " " . BULAN_DALAM_INDONESIA[explode('-', $row['tanggal_verifikasi'])[1] - 1] . " " . explode('-', $row['tanggal_verifikasi'])[0] ?></td>
-							<td class="text-center"><?= explode('-', $row['tanggal_selesai'])[2] . " " . BULAN_DALAM_INDONESIA[explode('-', $row['tanggal_selesai'])[1] - 1] . " " . explode('-', $row['tanggal_selesai'])[0] ?></td>
+							<td class="text-center"><?= explode('-', $row['tanggal_kegiatan'])[2] . " " . BULAN_DALAM_INDONESIA[explode('-', $row['tanggal_kegiatan'])[1] - 1] . " " . explode('-', $row['tanggal_kegiatan'])[0] ?></td>
 						</tr>
 					<?php endwhile; ?>
 				<?php else : ?>
 					<tr>
-						<td colspan="7" class="text-center">Tidak Ada Data</td>
+						<td colspan="4" class="text-center">Tidak Ada Data</td>
 					</tr>
 				<?php endif; ?>
 			</tbody>
