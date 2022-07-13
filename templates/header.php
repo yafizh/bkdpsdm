@@ -45,6 +45,8 @@
       white-space: nowrap;
     }
   </style>
+  
+  <script src="assets/js/iframe-download.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">

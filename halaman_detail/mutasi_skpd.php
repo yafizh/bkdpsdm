@@ -399,6 +399,9 @@ if ($_SESSION['status'] === 'ADMIN') {
                         <div class="card-header">
                             <h3 class="card-title">Dokumen SK Mutasi</h3>
                             <div class="card-tools">
+                                <button type="button" class="btn btn-tool" onclick="download(this, 'SK Mutasi')">
+                                    <i class="fas fa-download"></i>
+                                </button>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -412,6 +415,9 @@ if ($_SESSION['status'] === 'ADMIN') {
                         <div class="card-header">
                             <h3 class="card-title">Dokumen Nota Usul</h3>
                             <div class="card-tools">
+                                <button type="button" class="btn btn-tool" onclick="download(this, 'Nota Usul')">
+                                    <i class="fas fa-download"></i>
+                                </button>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                     <i class="fas fa-plus"></i>
                                 </button>

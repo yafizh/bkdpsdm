@@ -40,7 +40,7 @@ $data = $result->fetch_assoc();
                         Nomor
                     </div>
                     <div class="col-9">
-                        : <?= "123" ?>
+                        : 
                     </div>
                     <div class="col-3">
                         Tanggal
