@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
                             <div class="form-group">
                                 <label for="jenis_spj">Jenis SPJ</label>
                                 <input type="text" name="jenis_spj" id="jenis_spj" value="<?= $_GET['page'] === 'spj_kenaikan_pangkat' ? 'KENAIKAN PANGKAT' : 'MUTASI'; ?>" hidden>
-                                <input type="text" class="form-control" value="<?= $_GET['page'] === 'spj_kenaikan_pangka' ? 'Kenaikan Pangkat' : 'Mutasi'; ?>" disabled>
+                                <input type="text" class="form-control" value="<?= $_GET['page'] === 'spj_kenaikan_pangkat' ? 'Kenaikan Pangkat' : 'Mutasi'; ?>" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="id_pegawai">Pegawai</label>

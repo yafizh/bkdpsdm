@@ -82,9 +82,9 @@
 					INNER JOIN 
 						pegawai 
 					ON 
-						$table.tanggal_pengajuan >= '$dari' AND $table.tanggal_pengajuan <= '$sampai' 
+						pegawai.id=$table.id_pegawai  
 					WHERE 
-						pegawai.id=$table.id_pegawai " .
+						(DATE($table.tanggal_pengajuan) >= '$dari' AND DATE($table.tanggal_pengajuan) <= '$sampai') " .
 					((isset($_GET['jenis_mutasi']) && isset($_GET['tujuan_mutasi'])) ? "AND $table.tujuan_mutasi='" . $_GET['tujuan_mutasi'] . "' AND $table.jenis_mutasi='" . $_GET['jenis_mutasi'] . "'" : "")
 					. " 
 					ORDER BY 

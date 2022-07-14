@@ -88,7 +88,7 @@
 					($_POST['periode'] === "" ? "" : "WHERE $table.periode='" . $_POST['periode'] . "'")
 					. " 
 					WHERE 
-						$table.tanggal_pengajuan >= '$dari' AND $table.tanggal_pengajuan <= '$sampai' 
+						DATE($table.tanggal_pengajuan) >= '$dari' AND DATE($table.tanggal_pengajuan) <= '$sampai' 
 					ORDER BY 
 						$table.id";
 
