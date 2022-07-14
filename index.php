@@ -136,6 +136,8 @@ if (isset($_SESSION['status'])) {
                         include_once "halaman_edit_data/spj.php";
                     elseif ($_GET['method'] === 'hapus')
                         include_once "halaman_hapus_data/spj.php";
+                    elseif ($_GET['method'] === 'detail')
+                        include_once "halaman_detail/spj.php";
                 } else
                     include_once "halaman_tampil_data/spj_mutasi.php";
                 break;
@@ -147,6 +149,8 @@ if (isset($_SESSION['status'])) {
                         include_once "halaman_edit_data/spj.php";
                     elseif ($_GET['method'] === 'hapus')
                         include_once "halaman_hapus_data/spj.php";
+                    elseif ($_GET['method'] === 'detail')
+                        include_once "halaman_detail/spj.php";
                 } else
                     include_once "halaman_tampil_data/spj_kenaikan_pangkat.php";
                 break;

@@ -48,9 +48,9 @@
                             </td>
                             <td class="text-center">
                                 <a href="halaman_laporan/surat_spj.php?id=<?= $row['id'] ?>" target="_blank" class="btn btn-sm btn-secondary"><i class="fas fa-file"></i></a>
-                                <a href="?page=spj_kenaikan_pangkat&method=detail&id=<?= $row['id'] ?>" class="btn btn-sm btn-info"><i class="far fa-eye"></i></a>
-                                <a href="?page=spj_kenaikan_pangkat&method=edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="far fa-edit"></i></a>
-                                <form action="?page=spj_kenaikan_pangkat&method=hapus&id=<?= $row['id'] ?>" method="POST" class="d-inline">
+                                <a href="?page=spj_mutasi&method=detail&id=<?= $row['id'] ?>" class="btn btn-sm btn-info"><i class="far fa-eye"></i></a>
+                                <a href="?page=spj_mutasi&method=edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="far fa-edit"></i></a>
+                                <form action="?page=spj_mutasi&method=hapus&id=<?= $row['id'] ?>" method="POST" class="d-inline">
                                     <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="far fa-trash-alt"></i></button>
                                 </form>
                             </td>
