@@ -82,16 +82,16 @@
 					INNER JOIN 
 						pegawai 
 					ON 
-						pegawai.id=$table.id_pegawai " .
-					((isset($_GET['jenis_mutasi']) && isset($_GET['tujuan_mutasi'])) ? "WHERE $table.tujuan_mutasi='" . $_GET['tujuan_mutasi'] . "' AND $table.jenis_mutasi='" . $_GET['jenis_mutasi'] . "'" : "")
-					. " 
-					WHERE 
 						$table.tanggal_pengajuan >= '$dari' AND $table.tanggal_pengajuan <= '$sampai' 
+					WHERE 
+						pegawai.id=$table.id_pegawai " .
+					((isset($_GET['jenis_mutasi']) && isset($_GET['tujuan_mutasi'])) ? "AND $table.tujuan_mutasi='" . $_GET['tujuan_mutasi'] . "' AND $table.jenis_mutasi='" . $_GET['jenis_mutasi'] . "'" : "")
+					. " 
 					ORDER BY 
 						$table.id";
 
 				if ($result = $mysqli->query($q)) {
-				} else echo "Error: " . $q . "<br>" . $mysqli->error;
+				} else die("Error: " . $q . "<br>" . $mysqli->error);
 				$no = 1;
 				?>
 				<?php if ($result->num_rows) : ?>

@@ -9,8 +9,7 @@ if (isset($_GET['id'])) {
     $dokumen5 = $data['skp_2_tahun_terakhir'];
     $dokumen6 = $data['izajah_terakhir'];
     $dokumen7 = $data['surat_pernyataan_bebas_hukuman'];
-    $dokumen8 = $data['nota_usul'];
-    $dokumen9 = $data['sk_mutasi'];
+    $dokumen8 = $data['sk_mutasi'];
 } else {
     echo "<script>alert('id tidak ditemukan');</script>";
     echo "<script>window.location.href = '?page=skpd';</script>";
@@ -61,24 +60,18 @@ if ($_SESSION['status'] === 'ADMIN') {
         if (file_exists($dokumen8)) unlink($dokumen8);
         $dokumen8 = $target_dir . Date("YmdHis") . "8." . strtolower(pathinfo(basename($_FILES["sk_mutasi"]["name"]), PATHINFO_EXTENSION));
         move_uploaded_file($_FILES["sk_mutasi"]["tmp_name"], $dokumen8);
-
-        if (file_exists($dokumen9)) unlink($dokumen9);
-        $dokumen9 = $target_dir . Date("YmdHis") . "9." . strtolower(pathinfo(basename($_FILES["nota_usul"]["name"]), PATHINFO_EXTENSION));
-        move_uploaded_file($_FILES["nota_usul"]["tmp_name"], $dokumen9);
-
         $q = "
         UPDATE 
             mutasi_skpd 
         SET 
             tanggal_selesai='" . Date("Y-m-d H:i:s") . "',
             sk_mutasi='$dokumen8',
-            nota_usul='$dokumen9',
             status='SELESAI'  
         WHERE 
             id=" . $_GET['id'] . "
         ";
         if ($mysqli->query($q)) {
-            echo "<script>alert('Berhasil menyerahkan SK Mutasi dan Nota Usul');</script>";
+            echo "<script>alert('Berhasil menyerahkan SK Mutasi');</script>";
             echo "<script>window.location.href = '?page=skpd';</script>";
         } else echo "Error: " . $q . "<br>" . $mysqli->error;
     }
@@ -126,7 +119,6 @@ if ($_SESSION['status'] === 'ADMIN') {
                                     <?php elseif ($data['status'] === "DITERIMA") : ?>
                                         <span class='badge badge-success'>Diterima</span>
                                         <span class='badge badge-warning'>Menunggu SK Mutasi</span>
-                                        <span class='badge badge-warning'>Menunggu Nota Usul</span>
                                     <?php elseif ($data['status'] === "DITOLAK") : ?>
                                         <span class='badge badge-danger'>Ditolak</span>
                                     <?php elseif ($data['status'] === "SELESAI") : ?>
@@ -250,7 +242,6 @@ if ($_SESSION['status'] === 'ADMIN') {
                                         <?php elseif ($data['status'] === "DITERIMA") : ?>
                                             <span class='badge badge-success'>Diterima</span>
                                             <span class='badge badge-warning'>Menunggu SK Mutasi</span>
-                                            <span class='badge badge-warning'>Menunggu Nota Usul</span>
                                         <?php elseif ($data['status'] === "DITOLAK") : ?>
                                             <span class='badge badge-danger'>Ditolak</span>
                                         <?php elseif ($data['status'] === "SELESAI") : ?>
@@ -276,15 +267,6 @@ if ($_SESSION['status'] === 'ADMIN') {
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="sk_mutasi" name="sk_mutasi" accept=".pdf" onchange="preview(this)" required>
                                             <label class="custom-file-label" for="sk_mutasi">Pilih File</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nota_usul">Nota Usul</label>
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="nota_usul" name="nota_usul" accept=".pdf" onchange="preview(this)" required>
-                                            <label class="custom-file-label" for="nota_usul">Pilih File</label>
                                         </div>
                                     </div>
                                 </div>
@@ -411,22 +393,6 @@ if ($_SESSION['status'] === 'ADMIN') {
                             <iframe src="<?= $dokumen8; ?>" id="preview-sk_mutasi" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                         </div>
                     </div>
-                    <div class="card card-success collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title">Dokumen Nota Usul</h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" onclick="download(this, 'Nota Usul')">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body" style="height: 640px; display: none;">
-                            <iframe src="<?= $dokumen9; ?>" id="preview-nota_usul" style="width: 100%; height: 100%;" frameborder="0"></iframe>
-                        </div>
-                    </div>
                 <?php endif; ?>
                 <?php if ($_SESSION['status'] === 'ADMIN') : ?>
                     <div class="card card-primary collapsed-card">
@@ -440,19 +406,6 @@ if ($_SESSION['status'] === 'ADMIN') {
                         </div>
                         <div class="card-body" style="height: 640px; display: none;">
                             <iframe src="<?= $dokumen8; ?>" id="preview-sk_mutasi" style="width: 100%; height: 100%;" frameborder="0"></iframe>
-                        </div>
-                    </div>
-                    <div class="card card-primary collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title">Dokumen Nota Usul</h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body" style="height: 640px; display: none;">
-                            <iframe src="<?= $dokumen9; ?>" id="preview-nota_usul" style="width: 100%; height: 100%;" frameborder="0"></iframe>
                         </div>
                     </div>
                 <?php endif; ?>
