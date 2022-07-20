@@ -84,11 +84,11 @@
 					INNER JOIN 
 						pegawai 
 					ON 
-						pegawai.id=$table.id_pegawai " .
-					($_POST['periode'] === "" ? "" : "WHERE $table.periode='" . $_POST['periode'] . "'")
-					. " 
+						pegawai.id=$table.id_pegawai 
 					WHERE 
-						DATE($table.tanggal_pengajuan) >= '$dari' AND DATE($table.tanggal_pengajuan) <= '$sampai' 
+						(DATE($table.tanggal_pengajuan) >= '$dari' AND DATE($table.tanggal_pengajuan) <= '$sampai') " .
+					($_POST['periode'] === "" ? "" : " AND $table.periode='" . $_POST['periode'] . "' ")
+					. " 
 					ORDER BY 
 						$table.id";
 
