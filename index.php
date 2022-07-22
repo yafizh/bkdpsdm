@@ -158,8 +158,16 @@ if (isset($_SESSION['status'])) {
                 include_once "halaman_laporan/index.php";
                 break;
             default:
-                include_once "beranda.php";
+                if ($_SESSION['status'] == 'PEGAWAI')
+                    include_once "beranda_pegawai.php";
+                else
+                    include_once "beranda.php";
         }
-    } else include_once "beranda.php";
+    } else {
+        if ($_SESSION['status'] == 'PEGAWAI')
+            include_once "beranda_pegawai.php";
+        else
+            include_once "beranda.php";
+    }
 } else header('Location: halaman_auth/login.php');
 include_once "templates/footer.php";

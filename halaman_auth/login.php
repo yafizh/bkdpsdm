@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
 				</div>
 				<form action="" method="POST">
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" name="username" placeholder="Username">
+						<input type="text" class="form-control" name="username" placeholder="Username" autofocus>
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<span class="fas fa-envelope"></span>
