@@ -6,13 +6,15 @@ if (isset($_GET['id'])) {
 
     $sql_user = "DELETE FROM user WHERE id=" . $data['id_user'];
     $sql_pegawai = "DELETE FROM pegawai WHERE id=" . $_GET['id'];
-    if ($mysqli->query($sql_user) === TRUE && $mysqli->query($sql_pegawai) === TRUE) {
-        if (file_exists($data['gambar'])) unlink($data['gambar']);
-        echo "<script>alert('Pegawai berhasil dihapus.')</script>";
-        echo "<script>" .
-            "window.location.href='?page=" . $_GET['page'] . "';" .
-            "</script>";
-    } else echo "Error: " . $sql . "<br>" . $mysqli->error;
+    if ($mysqli->query($sql_pegawai) === TRUE) {
+        if ($mysqli->query($sql_user) === TRUE) {
+            if (file_exists($data['gambar'])) unlink($data['gambar']);
+            echo "<script>alert('Pegawai berhasil dihapus.')</script>";
+            echo "<script>" .
+                "window.location.href='?page=" . $_GET['page'] . "';" .
+                "</script>";
+        } else echo "Error: " . $sql_user . "<br>" . $mysqli->error;
+    } else echo "Error: " . $sql_pegawai . "<br>" . $mysqli->error;
 } else {
     echo "<script>alert('id tidak ditemukan');</script>";
     echo "<script>window.location.href = '?page=" . $_GET['page'] . "';</script>";
