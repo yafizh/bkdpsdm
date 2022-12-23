@@ -14,8 +14,11 @@ if (isset($_POST['submit'])) {
 			$_SESSION['id'] = $user['id'];
 			$_SESSION['status'] = $user['status'];
 			$_SESSION['gambar'] = $user['gambar'];
-			header('Location: ../index.php');
-		} else echo "<script>alert('Username atau Password Salah!');</script>";
+			echo "<script>alert('Akun Ditemukan!');</script>";
+			echo "<script>window.location.replace('../index.php');</script>";
+		} else {
+			echo "<script>alert('Username atau Password Salah!');</script>";
+		}
 	} else echo "Error: " . $sql . "<br>" . $mysqli->error;
 }
 ?>
